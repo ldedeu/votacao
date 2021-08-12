@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+//@Transactional
 public class PautaService {
 
     @Autowired
@@ -23,11 +23,13 @@ public class PautaService {
         pautaRepository.save(pauta);
     }
 
-    public Pauta getPauta(Integer id) {
+    public Pauta getPauta(Long id) {
         return pautaRepository.findById(id).get();
     }
 
-    public void deleteAssociado(Integer id) {
+    public void deleteAssociado(Long id) {
         pautaRepository.deleteById(id);
     }
+
+
 }

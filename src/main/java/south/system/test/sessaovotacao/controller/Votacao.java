@@ -1,13 +1,16 @@
 package south.system.test.sessaovotacao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import south.system.test.sessaovotacao.model.Associado;
 import south.system.test.sessaovotacao.model.Pauta;
+import south.system.test.sessaovotacao.model.PautaAssociado;
+import south.system.test.sessaovotacao.service.AssociadoService;
+import south.system.test.sessaovotacao.service.PautaAssociadoService;
 import south.system.test.sessaovotacao.service.PautaService;
-
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/votacao")
@@ -16,20 +19,33 @@ public class Votacao {
     @Autowired
     PautaService pautaService;
 
-  //  @PostMapping("/pauta/cadastrar_pauta")
+    @Autowired
+    AssociadoService associadoService;
+
+    @Autowired
+    PautaAssociadoService pautaAssociadoService;
+
+    /**
+     * Metodo para cadastrar pauta
+     * @param pauta
+     */
     @PostMapping(path = "/pauta/cadastrar_pauta", consumes = "application/json", produces = "application/json")
     public void cadastrarPauta(@RequestBody Pauta pauta) {
         pautaService.savePauta(pauta);
     }
 
-    @GetMapping("/pauta/{id}")
-    public ResponseEntity<Pauta> get(@PathVariable Integer id) {
-        try {
-            Pauta pauta = pautaService.getPauta(id);
-            return new ResponseEntity<>(pauta, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    /**
+     * Metodo para cadastrar pauta
+     * @param pauta
+     */
+    @PostMapping(path = "/associado/cadastrar_associado", consumes = "application/json", produces = "application/json")
+    public void cadastrarAssociado(@RequestBody Associado associado) {
+        associadoService.saveAssociado(associado);
+    }
+
+    @PostMapping(path = "/pauta/voto", consumes = "application/json", produces = "application/json")
+    public void voto(@RequestBody PautaAssociado pautaAssociado) {
+        pautaAssociadoService.votar(pautaAssociado);
     }
 
 }

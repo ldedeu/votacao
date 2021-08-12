@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+//@Transactional
 public class AssociadoService {
 
     @Autowired
@@ -23,11 +23,11 @@ public class AssociadoService {
         IAssociadoRepository.save(associado);
     }
 
-    public Associado getAssociado(Integer id) {
+    public Associado getAssociado(Long id) {
         return IAssociadoRepository.findById(id).get();
     }
 
-    public void deleteAssociado(Integer id) {
+    public void deleteAssociado(Long id) {
         IAssociadoRepository.deleteById(id);
     }
 }
