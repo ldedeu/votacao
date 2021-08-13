@@ -1,6 +1,8 @@
 package south.system.test.sessaovotacao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import south.system.test.sessaovotacao.model.Associado;
 import south.system.test.sessaovotacao.model.Pauta;
@@ -8,6 +10,7 @@ import south.system.test.sessaovotacao.model.PautaAssociado;
 import south.system.test.sessaovotacao.service.AssociadoService;
 import south.system.test.sessaovotacao.service.PautaAssociadoService;
 import south.system.test.sessaovotacao.service.PautaService;
+import south.system.test.sessaovotacao.util.Erro;
 
 /**
  * API para executar uma sessao de votacao.
@@ -15,7 +18,7 @@ import south.system.test.sessaovotacao.service.PautaService;
  * @author lauren.dedeu
  */
 @RestController
-@RequestMapping("/votacao")
+@RequestMapping("/votacao/v1")
 public class Votacao {
 
     @Autowired
@@ -33,8 +36,12 @@ public class Votacao {
      * @param pauta Pauta a cadastrar
      */
     @PostMapping(path = "/pauta/cadastrar_pauta", consumes = "application/json", produces = "application/json")
-    public void cadastrarPauta(@RequestBody Pauta pauta) {
-        pautaService.savePauta(pauta);
+    public ResponseEntity<?> cadastrarPauta(@RequestBody Pauta pauta) {
+        try {
+            return new ResponseEntity<>(pautaService.savePauta(pauta), HttpStatus.CREATED);
+        } catch (Exception exception) {
+            return gerarError(exception);
+        }
     }
 
     /**
@@ -43,8 +50,13 @@ public class Votacao {
      * @param associado Associado a cadastrar
      */
     @PostMapping(path = "/associado/cadastrar_associado", consumes = "application/json", produces = "application/json")
-    public void cadastrarAssociado(@RequestBody Associado associado) {
-        associadoService.saveAssociado(associado);
+    public ResponseEntity<?> cadastrarAssociado(@RequestBody Associado associado) {
+        try {
+            return new ResponseEntity<>(associadoService.saveAssociado(associado), HttpStatus.CREATED);
+        } catch (Exception exception) {
+            return gerarError(exception);
+        }
+
     }
 
     /**
@@ -54,8 +66,12 @@ public class Votacao {
      * @return String com mensagem do resultado da votacao do Associado na Pauta
      */
     @PostMapping(path = "/pauta/voto", consumes = "application/json", produces = "application/json")
-    public String voto(@RequestBody PautaAssociado pautaAssociado) {
-        return pautaAssociadoService.votar(pautaAssociado);
+    public ResponseEntity<?> voto(@RequestBody PautaAssociado pautaAssociado) {
+        try {
+            return new ResponseEntity<>(pautaAssociadoService.votar(pautaAssociado), HttpStatus.CREATED);
+        } catch (Exception exception) {
+            return gerarError(exception);
+        }
     }
 
     /**
@@ -66,8 +82,24 @@ public class Votacao {
      * Total de eleitores, Total SIM e Total NAO
      */
     @GetMapping(path = "/pauta/voto/resultados/{pautaId}", produces = "application/json")
-    public String resultadosVotacao(@PathVariable(value = "pautaId") Long pautaId) {
-        return pautaService.resultadoVotacao(pautaId);
+    public ResponseEntity<?> resultadosVotacao(@PathVariable(value = "pautaId") Long pautaId) {
+        try {
+            return new ResponseEntity<>(pautaService.resultadoVotacao(pautaId), HttpStatus.CREATED);
+        } catch (Exception exception) {
+            return gerarError(exception);
+        }
+    }
+
+    /**
+     * Método para criar erro dada uma exception
+     *
+     * @param exception Exception lancada.
+     * @return ResponseEntity<Erro> con os dados do Erro
+     * @auto
+     */
+    private ResponseEntity<Erro> gerarError(Exception exception) {
+        Erro erro = new Erro(exception.getCause().getCause().getMessage(), exception.getCause().getCause().getClass().getName());
+        return new ResponseEntity<>(erro, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

@@ -6,14 +6,14 @@ package south.system.test.sessaovotacao.util;
  * @author lauren.dedeu
  * @version 1.0
  */
-public class UtilResponse {
+public class Response {
 
     private String message;
 
-    public UtilResponse() {
+    public Response() {
     }
 
-    public UtilResponse(String message) {
+    public Response(String message) {
         this.message = message;
     }
 

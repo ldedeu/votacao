@@ -36,28 +36,31 @@ public class ScheduleTask {
      * @author lauren.dedeu
      */
     @Scheduled(cron = "* * * * * *")
-    public void sessaoVotacao() {
+    private void sessaoVotacao() {
 
-        List<Pauta> pautas = pautaService.findAll();
-        List<Associado> associados = associadoService.findAll();
-        String voto = "";
+        try {
+            List<Pauta> pautas = pautaService.findAll();
+            List<Associado> associados = associadoService.findAll();
+            String voto = "";
 
-        for (Pauta temp : pautas) {
-            for (Associado tempA : associados) {
-                if ("".equalsIgnoreCase(voto))
-                    voto = "SIM";
-                else if ("SIM".equalsIgnoreCase(voto))
-                    voto = "NAO";
-                else
-                    voto = "SIM";
+            for (Pauta temp : pautas) {
+                for (Associado tempA : associados) {
+                    if ("".equalsIgnoreCase(voto))
+                        voto = "SIM";
+                    else if ("SIM".equalsIgnoreCase(voto))
+                        voto = "NAO";
+                    else
+                        voto = "SIM";
 
-                PautaAssociado pautaAssociado = new PautaAssociado(temp, tempA, voto);
-                PautaAssociadoId id = new PautaAssociadoId(temp.getId(), tempA.getId());
-                pautaAssociado.setId(id);
-                pautaAssociadoService.votar(pautaAssociado);
+                    PautaAssociado pautaAssociado = new PautaAssociado(temp, tempA, voto);
+                    PautaAssociadoId id = new PautaAssociadoId(temp.getId(), tempA.getId());
+                    pautaAssociado.setId(id);
+                    pautaAssociadoService.votar(pautaAssociado);
+                }
+                System.out.println(pautaService.resultadoVotacao(temp.getId()));
             }
-
-            System.out.println(pautaService.resultadoVotacao(temp.getId()));
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
         }
     }
 }

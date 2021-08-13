@@ -24,8 +24,8 @@ public class Associado {
     @Column(length = 50)
     private String sobrenome;
 
-    @Column(length = 11, nullable = false, unique = true)
-    private String cpf;
+    @Column(nullable = false, unique = true)
+    private Long cpf;
 
     @OneToMany(mappedBy = "associado", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PautaAssociado> pautas = new ArrayList<>();
@@ -33,7 +33,7 @@ public class Associado {
     public Associado() {
     }
 
-    public Associado(Long id, String nome, String sobrenome, String cpf) {
+    public Associado(Long id, String nome, String sobrenome, Long cpf) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -68,11 +68,11 @@ public class Associado {
         return pautas;
     }
 
-    public String getCpf() {
+    public Long getCpf() {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
+    public void setCpf(Long cpf) {
         this.cpf = cpf;
     }
 

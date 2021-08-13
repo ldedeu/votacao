@@ -1,16 +1,14 @@
 package south.system.test.sessaovotacao.service;
 
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import south.system.test.sessaovotacao.util.UtilResponse;
 import south.system.test.sessaovotacao.model.Pauta;
 import south.system.test.sessaovotacao.model.PautaAssociado;
 import south.system.test.sessaovotacao.repository.IPautaRepository;
+import south.system.test.sessaovotacao.util.Response;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Classe servico para a entidad Pauta
@@ -24,9 +22,6 @@ public class PautaService {
 
     @Autowired
     private IPautaRepository pautaRepository;
-
-    @Autowired
-    private Gson gson = new Gson();
 
     /**
      * Método para obter todas as pautas
@@ -42,8 +37,8 @@ public class PautaService {
      *
      * @param pauta Pauta a cadastrar
      */
-    public void savePauta(Pauta pauta) {
-        pautaRepository.save(pauta);
+    public Pauta savePauta(Pauta pauta) throws Exception {
+        return pautaRepository.save(pauta);
     }
 
     /**
@@ -62,10 +57,10 @@ public class PautaService {
      * @param idPauta Id da pauta.
      * @return String com mensagem dos resultados (Total de eleitores, Total SIM e Total NAO)
      */
-    public String resultadoVotacao(Long idPauta) {
+    public Response resultadoVotacao(Long idPauta) throws Exception {
 
         Pauta pauta = this.getPauta(idPauta);
-        UtilResponse response = new UtilResponse();
+        Response response = new Response();
         List<PautaAssociado> associados = pauta.getAssociados();
 
         int totalEleitores = associados.size();
@@ -78,7 +73,7 @@ public class PautaService {
                 + "Votos SIM: " + totalSIM + " "
                 + "Votos NAO: " + totalNAO);
 
-        return gson.toJson(response);
+        return response;
     }
 
 

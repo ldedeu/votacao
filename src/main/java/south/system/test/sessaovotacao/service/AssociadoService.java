@@ -1,11 +1,14 @@
 package south.system.test.sessaovotacao.service;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import south.system.test.sessaovotacao.model.Associado;
 import south.system.test.sessaovotacao.repository.IAssociadoRepository;
 
 import javax.transaction.Transactional;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 /**
@@ -35,7 +38,7 @@ public class AssociadoService {
      *
      * @param associado Associado a cadastrar
      */
-    public void saveAssociado(Associado associado) {
-        IAssociadoRepository.save(associado);
+    public Associado saveAssociado(Associado associado) throws Exception {
+        return IAssociadoRepository.save(associado);
     }
 }
