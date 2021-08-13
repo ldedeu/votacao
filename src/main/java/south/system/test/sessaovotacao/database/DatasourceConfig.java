@@ -7,6 +7,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
+/**
+ * Classe para ao acceso na base de dados.
+ *
+ * @author lauren.dedeu
+ * @version 1.0
+ */
 @Configuration
 public class DatasourceConfig {
 

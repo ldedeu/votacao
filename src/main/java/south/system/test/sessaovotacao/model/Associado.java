@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Classe para entidad associado.
+ *
+ * @author lauren.dedeu
+ * @version 1.0
+ */
 @Entity(name = "associado")
 public class Associado {
 
@@ -18,23 +24,20 @@ public class Associado {
     @Column(length = 50)
     private String sobrenome;
 
-//    @ManyToMany(mappedBy = "associadosJ", fetch = FetchType.LAZY)
-//    private List<Pauta> pautasJ = new ArrayList<>();
+    @Column(length = 11, nullable = false, unique = true)
+    private String cpf;
 
-    @OneToMany(
-            mappedBy = "associado",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "associado", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PautaAssociado> pautas = new ArrayList<>();
 
     public Associado() {
     }
 
-    public Associado(Long id, String nome, String sobrenome) {
+    public Associado(Long id, String nome, String sobrenome, String cpf) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
+        this.cpf = cpf;
     }
 
     public Long getId() {
@@ -65,20 +68,24 @@ public class Associado {
         return pautas;
     }
 
-//    public List<Pauta> getPautasJ() {
-//        return pautasJ;
-//    }
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Associado associado = (Associado) o;
-        return id.equals(associado.id);
+        return id.equals(associado.id) && cpf.equals(associado.cpf);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, cpf);
     }
 }

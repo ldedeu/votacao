@@ -8,26 +8,34 @@ import south.system.test.sessaovotacao.repository.IAssociadoRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Classe servico para a entidad Associado
+ *
+ * @author lauren.dedeu
+ * @version 1.0
+ */
 @Service
-//@Transactional
+@Transactional
 public class AssociadoService {
 
     @Autowired
     private IAssociadoRepository IAssociadoRepository;
 
-    public List<Associado> listAllAssociado() {
+    /**
+     * Método para obter todos os associados
+     *
+     * @return Lista dos associados
+     */
+    public List<Associado> findAll() {
         return IAssociadoRepository.findAll();
     }
 
+    /**
+     * Método para cadastrar um associado
+     *
+     * @param associado Associado a cadastrar
+     */
     public void saveAssociado(Associado associado) {
         IAssociadoRepository.save(associado);
-    }
-
-    public Associado getAssociado(Long id) {
-        return IAssociadoRepository.findById(id).get();
-    }
-
-    public void deleteAssociado(Long id) {
-        IAssociadoRepository.deleteById(id);
     }
 }

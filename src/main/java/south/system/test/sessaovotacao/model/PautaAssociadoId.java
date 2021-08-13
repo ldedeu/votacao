@@ -1,17 +1,19 @@
 package south.system.test.sessaovotacao.model;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Classe para formar ID composto para a classe do relacionamento de Pauta e Associado
+ *
+ * @author lauren.dedeu
+ * @version 1.0
+ */
 @Embeddable
 public class PautaAssociadoId implements Serializable {
 
-    //@Column(name = "pauta_id")
     private Long pautaId;
-
-   //@Column(name = "associado_id")
     private Long associadoId;
 
     private PautaAssociadoId() {

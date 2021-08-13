@@ -3,21 +3,23 @@ package south.system.test.sessaovotacao.model;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * Entidad resultado do relacionamento muitos para muitos entre pauta e associado.
+ *
+ * @author lauren dedeu
+ * @version 1.0
+ */
 @Entity(name = "pauta_associado")
 public class PautaAssociado {
 
     @EmbeddedId
     private PautaAssociadoId id;
 
-    //(fetch = FetchType.LAZY)
-    //@MapsId("id")
     @ManyToOne
-    //@JoinColumn(name = "pauta_id", referencedColumnName = "id", insertable = false, updatable = false)
     @MapsId("pautaId")
     private Pauta pauta;
 
     @ManyToOne
-    //@JoinColumn(name = "associado_id", referencedColumnName = "id", insertable = false, updatable = false)
     @MapsId("associadoId")
     private Associado associado;
 
@@ -27,8 +29,8 @@ public class PautaAssociado {
     private PautaAssociado() {
     }
 
-    public PautaAssociado(Pauta pauta,Associado associado, String voto) {
-        //this.pauta = pauta;
+    public PautaAssociado(Pauta pauta, Associado associado, String voto) {
+        this.pauta = pauta;
         this.associado = associado;
         this.voto = voto;
     }
