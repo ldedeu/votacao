@@ -2,6 +2,7 @@ package south.system.test.sessaovotacao.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import south.system.test.sessaovotacao.kafka.KafkaProducerService;
 import south.system.test.sessaovotacao.model.Pauta;
 import south.system.test.sessaovotacao.model.PautaAssociado;
 import south.system.test.sessaovotacao.repository.IPautaRepository;
@@ -22,6 +23,9 @@ public class PautaService {
 
     @Autowired
     private IPautaRepository pautaRepository;
+
+    @Autowired
+    private KafkaProducerService producerService;
 
     /**
      * Método para obter todas as pautas
@@ -68,11 +72,11 @@ public class PautaService {
                 equalsIgnoreCase("sim")).count();
         final long totalNAO = associados.stream().filter(x -> x.getVoto().
                 equalsIgnoreCase("nao")).count();
-
-        response.setMessage("Na pauta con ID: " + " " + pauta.getId() + " votaram um total de: " + totalEleitores + " eleitores, "
+        String message = "Na pauta con ID: " + " " + pauta.getId() + " votaram um total de: " + totalEleitores + " eleitores, "
                 + "Votos SIM: " + totalSIM + " "
-                + "Votos NAO: " + totalNAO);
-
+                + "Votos NAO: " + totalNAO;
+        response.setMessage(message);
+        producerService.sendMessage(message);
         return response;
     }
 

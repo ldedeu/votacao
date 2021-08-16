@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import south.system.test.sessaovotacao.kafka.config.KafkaConfigFactory;
 import south.system.test.sessaovotacao.model.Associado;
 import south.system.test.sessaovotacao.model.Pauta;
 import south.system.test.sessaovotacao.model.PautaAssociado;
@@ -41,6 +42,9 @@ public class ScheduleTask {
 
     @Autowired
     private Gson gson;
+
+    @Autowired
+    KafkaConfigFactory consumer;
 
     private final String URL_USER_VALIDO = "https://user-info.herokuapp.com/users/{cpf}";
     private static final Logger logger = LoggerFactory.getLogger(ScheduleTask.class);
@@ -97,10 +101,12 @@ public class ScheduleTask {
                                     pautaAssociado.getAssociado().getSobrenome() + " " + "nao pode executar o voto.", temp);
                     }
                 }
-                logger.info(pautaService.resultadoVotacao(temp.getId()).getMessage(), temp);
+                pautaService.resultadoVotacao(temp.getId()).getMessage();
+                consumer.consumerFactory();
             }
         } catch (Exception exception) {
             logger.error(exception.getMessage(), exception);
         }
     }
+
 }
