@@ -33,6 +33,12 @@ public class Associado {
     public Associado() {
     }
 
+    public Associado(String nome, String sobrenome, Long cpf) {
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.cpf = cpf;
+    }
+
     public Associado(Long id, String nome, String sobrenome, Long cpf) {
         this.id = id;
         this.nome = nome;

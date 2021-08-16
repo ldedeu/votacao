@@ -108,7 +108,7 @@ public class Votacao {
      */
     private ResponseEntity<Erro> gerarError(Exception exception) {
         try {
-            Erro erro = new Erro(exception.getCause().getCause().getMessage(), exception.getCause().getCause().getClass().getName());
+            Erro erro = new Erro(exception.getCause().getMessage(), exception.getCause().getClass().getName());
             return new ResponseEntity<>(erro, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             logger.error("Um erro inesperado ocorreu", e);
