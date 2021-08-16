@@ -1,5 +1,7 @@
 package south.system.test.sessaovotacao.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,8 @@ public class ScheduleTask {
     @Autowired
     AssociadoService associadoService;
 
+    private static final Logger logger = LoggerFactory.getLogger(ScheduleTask.class);
+
     /**
      * Método que se executa a cada um minuto para a sessao de votacao das pautas.
      *
@@ -57,10 +61,10 @@ public class ScheduleTask {
                     pautaAssociado.setId(id);
                     pautaAssociadoService.votar(pautaAssociado);
                 }
-                System.out.println(pautaService.resultadoVotacao(temp.getId()));
+                logger.info(pautaService.resultadoVotacao(temp.getId()).getMessage(), temp);
             }
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());
+            logger.error(exception.getMessage(), exception);
         }
     }
 }

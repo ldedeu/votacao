@@ -1,5 +1,7 @@
 package south.system.test.sessaovotacao.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,9 @@ public class Votacao {
     @Autowired
     PautaAssociadoService pautaAssociadoService;
 
+    private static final Logger logger = LoggerFactory.getLogger(Votacao.class);
+
+
     /**
      * Método para cadastrar uma pauta
      *
@@ -40,6 +45,7 @@ public class Votacao {
         try {
             return new ResponseEntity<>(pautaService.savePauta(pauta), HttpStatus.CREATED);
         } catch (Exception exception) {
+            logger.error(exception.getMessage(), exception);
             return gerarError(exception);
         }
     }
@@ -54,6 +60,7 @@ public class Votacao {
         try {
             return new ResponseEntity<>(associadoService.saveAssociado(associado), HttpStatus.CREATED);
         } catch (Exception exception) {
+            logger.error(exception.getMessage(), exception);
             return gerarError(exception);
         }
 
@@ -70,6 +77,7 @@ public class Votacao {
         try {
             return new ResponseEntity<>(pautaAssociadoService.votar(pautaAssociado), HttpStatus.CREATED);
         } catch (Exception exception) {
+            logger.error(exception.getMessage(), exception);
             return gerarError(exception);
         }
     }
@@ -86,6 +94,7 @@ public class Votacao {
         try {
             return new ResponseEntity<>(pautaService.resultadoVotacao(pautaId), HttpStatus.CREATED);
         } catch (Exception exception) {
+            logger.error(exception.getMessage(), exception);
             return gerarError(exception);
         }
     }
@@ -98,8 +107,13 @@ public class Votacao {
      * @auto
      */
     private ResponseEntity<Erro> gerarError(Exception exception) {
-        Erro erro = new Erro(exception.getCause().getCause().getMessage(), exception.getCause().getCause().getClass().getName());
-        return new ResponseEntity<>(erro, HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            Erro erro = new Erro(exception.getCause().getCause().getMessage(), exception.getCause().getCause().getClass().getName());
+            return new ResponseEntity<>(erro, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            logger.error("Um erro inesperado ocorreu", e);
+            return null;
+        }
     }
 
 }

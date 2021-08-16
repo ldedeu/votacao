@@ -1,5 +1,7 @@
 package south.system.test.sessaovotacao.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import south.system.test.sessaovotacao.model.Associado;
@@ -34,6 +36,8 @@ public class PautaAssociadoService {
     @Autowired
     private IPautaAssociadoRepository pautaAssociadoRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(PautaAssociadoService.class);
+
     /**
      * Método para executar uma votacao.
      *
@@ -46,12 +50,14 @@ public class PautaAssociadoService {
 
         Response response = new Response();
         Optional<Pauta> optPauta = null;
-
+        String message;
         if (pautaAssociado.getPauta() != null && pautaAssociado.getPauta().getId() != null)
             optPauta = pautaRepository.findById(pautaAssociado.getPauta().getId());
 
         if (optPauta == null || !optPauta.isPresent()) {
-            response.setMessage("Nao existe uma pauta válida.");
+            message = "Nao existe uma pauta válida.";
+            logger.info(message, pautaAssociado);
+            response.setMessage(message);
             return response;
         }
 
@@ -62,7 +68,9 @@ public class PautaAssociadoService {
             associado = associadoRepository.findById(pautaAssociado.getAssociado().getId());
 
         if (associado == null || !associado.isPresent()) {
-            response.setMessage("Nao existe um associado válido.");
+            message = "Nao existe um associado válido.";
+            logger.info(message, pautaAssociado);
+            response.setMessage(message);
             return response;
         }
 
@@ -73,10 +81,12 @@ public class PautaAssociadoService {
 
         if (optionalPautaAssociado.isPresent()) {
             Associado associadoPresent = optionalPautaAssociado.get().getAssociado();
-            response.setMessage("O associado ".concat(associadoPresent.getNome() + " "
+            message = "O associado ".concat(associadoPresent.getNome() + " "
                     + associadoPresent.getSobrenome() + " "
                     + "voto" + " " + optionalPautaAssociado.get().getVoto() + " "
-                    + "nao pode voltar votar nesta pauta"));
+                    + "nao pode voltar votar nesta pauta");
+            logger.info(message, pautaAssociado);
+            response.setMessage(message);
             return response;
         }
 
@@ -84,7 +94,9 @@ public class PautaAssociadoService {
                 pautaAssociado.getAssociado().getId());
         pautaAssociado.setId(pautaAssociadoId);
         pautaAssociadoRepository.save(pautaAssociado);
-        response.setMessage("O voto foi corretamente executado.");
+        message = "O voto foi corretamente executado.";
+        response.setMessage(message);
+        logger.info(message, pautaAssociado);
         return response;
     }
 }
